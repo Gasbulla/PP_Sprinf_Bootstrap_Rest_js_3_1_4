@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div class="d-grid gap-2" th:fragment="header (user)">
+        <a class="btn btn-block text-left" href="/admin" role="button" th:if=${user.isAdmin()}
+           th:classappend="${#httpServletRequest.requestURI == '/admin'?'btn-primary btn-block':'btn-link btn-block'}">Admin</a>
+        <a class="btn btn-block text-left" href="/user" role="button"
+           th:classappend="${#httpServletRequest.requestURI == '/user'?'btn-primary btn-block':'btn-link btn-block'}">User</a>
+</div>
+</body>
+</html>

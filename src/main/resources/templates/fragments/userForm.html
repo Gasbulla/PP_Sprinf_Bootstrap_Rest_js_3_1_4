@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>User form</title>
+</head>
+<body>
+
+<div th:fragment="userFormInputs (method, user, roleList)">
+    <div class="mb-3" th:if="${not (method == 'POST')}">
+        <label for="id" class="form-label">Id:</label>
+        <input type="text" class="form-control form-control-sm" th:name="id" th:value="${user.id}" id="id" th:disabled="true">
+    </div>
+    <div class="mb-3">
+        <label for="name" class="form-label">Enter name:</label>
+        <input type="text" class="form-control form-control-sm" th:name="name" th:value="${user.name}" id="name" th:disabled="${method == 'DELETE'}">
+    </div>
+    <div class="mb-3">
+        <label for="lastName" class="form-label">Enter last name:</label>
+        <input type="text" class="form-control form-control-sm" th:name="lastName" th:value="${user.lastName}" id="lastName" th:disabled="${method == 'DELETE'}">
+    </div>
+    <div class="mb-3">
+        <label for="email" class="form-label">Enter email:</label>
+        <input type="text" class="form-control form-control-sm" th:name="email" th:value="${user.email}" id="email" th:disabled="${method == 'DELETE'}">
+    </div>
+    <div class="mb-3">
+        <label for="password" class="form-label" th:if="${not (method == 'DELETE')}">Enter password:</label>
+        <input type="text" class="form-control  form-control-sm" th:name="password" th:value="${user.password}" id="password" th:if="${not (method == 'DELETE')}">
+    </div>
+    <p>
+        <label for="roles-select" class="form-label">Roles:</label>
+        <input placeholder=" New task" id="box" required="required">
+        <select id="roles-select" class="custom-select" multiple th:name="roles" th:disabled="${method == 'DELETE'}">
+            <option th:each="role : ${roleList}"
+                    th:selected="${user.hasRole(role)}"
+                    th:value="${role.name}"
+                    th:text="${role.getTitle()}">Wireframe</option>
+        </select>
+    </p>
+</div>
+
+<div th:fragment="userForm (method, action, user, roleList)">
+    <form th:method="${method}" th:action="${action}" th:object="${user}">
+        <div th:replace="this :: userFormInputs(method=${method}, user=${user}, roleList=${roleList})"></div>
+        <input class="btn btn-success" type="submit" value="Add new user"/>
+    </form>
+</div>
+
+<div th:fragment="userFormModal (method, action, user, roleList)">
+    <button type="button" class="btn btn-primary" data-toggle="modal" th:data-target="${'#' + method + user.id}" th:if="${not (method == 'DELETE')}">
+        Edit
+    </button>
+    <button type="button" class="btn btn-danger" data-toggle="modal" th:data-target="${'#' + method + user.id}" th:if="${method == 'DELETE'}">
+        Delete
+    </button>
+    <div class="modal fade" tabindex="-1" th:id="${method + user.id}" aria-hidden="true">
+        <div class="modal-dialog">
+            <form th:method="${method}" th:action="${action}" th:object="${user}">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" th:if="${method == 'DELETE'}">Delete user</h5>
+                        <h5 class="modal-title" th:if="${not (method == 'DELETE')}">Edit user</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="container">
+                            <div class="row justify-content-md-center text-center">
+                                <div class="col-10 align-self-center">
+                                    <div th:replace="this :: userFormInputs(method=${method}, user=${user}, roleList=${roleList})"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary" th:if="${not (method == 'DELETE')}">Edit</button>
+                        <button type="submit" class="btn btn-danger" th:if="${method == 'DELETE'}">Delete</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

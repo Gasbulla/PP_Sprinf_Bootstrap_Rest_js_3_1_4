@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+</head>
+<body>
+<div class="navbar navbar-dark bg-dark" th:fragment="header (user)">
+    <a class="navbar-brand" href="#">
+        <b th:text="${user.getEmail()}"></b>
+        [[${' with roles: ' + user.getRolesTitle()}]]
+    </a>
+    <a class="btn btn-link" th:href="@{/logout}">Logout</a>
+</div>
+</body>
+</html>
+
+<!--class="navbar navbar-inverse navbar-fixed-top" th:fragment="header (user)"-->
